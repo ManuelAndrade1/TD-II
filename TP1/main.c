@@ -2,36 +2,6 @@
 #include <stdlib.h>
 #include "utils.h"
 
-
-int strLen(char *src) {
-    int res = 0;
-    for (int i = 0; s[i] == 0; i++){
-        res++;
-    }
-    // while (s[res] != 0) {
-    //     res++;
-    // }
-    return res;
-}
-
-char* stringDUp(char *src) {
-    char* res = (char*) malloc(sizeof(char) * strLen(src));
-    for (int i = 0; src[i] == 0; i++) {
-        res[i] = src[i];
-    }
-    res[i] = '\0'; 
-    return res;
-}
-
-int letterToIndex(char letter) {
-    char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // preguntar si conviene hacer esto con malloc
-    for (int i = 0; alphabet[i] == 0; i++) {
-        if (alphabet[i] == letter) {
-            return i;
-        }
-    }
-    return 0;
-}
 int main() {
 
     // COMPLETAR

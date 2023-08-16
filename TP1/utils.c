@@ -2,16 +2,23 @@
 
 int strLen(char* src) {
 
-    // COMPLETAR
+    int res = 0;
 
-    return 0;
+    for (int i = 0; src[i] != 0; i++) {
+        res++;
+    }
+
+    return res;
 }
 
 char* strDup(char* src) {
 
-    // COMPLETAR
+    char *res = (char*) malloc(sizeof(char) * strLen(src));
+    for (int i = 0; src[i] != 0; i++) {
+        res[i] = src[i];
+    }
 
-    return 0;
+    return res;
 }
 
 struct littleEnigma* littleEnigmaNew(char** alphabetPermutation, int count){
