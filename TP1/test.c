@@ -19,7 +19,28 @@ struct letter {
     struct letter* next;
 };
 
+int strLen(char* src);
+char* strDup(char* src);
+struct littleEnigma* littleEnigmaNew(char** alphabetPermutation, int count);
+void littleEnigmaSet(struct littleEnigma* le, int* password);
+char* littleEnigmaEncrypt(struct littleEnigma* le, char* text);
+char* littleEnigmaDecrypt(struct littleEnigma* le, char* code);
+void littleEnigmaDelete(struct littleEnigma* le);
+void littleEnigmaPrint(struct littleEnigma* le);
+void addLast (struct letter* first, struct letter* next);
+struct wheel* makeWheelFromString(char* alphabetPermutation);
+void setWheel(struct wheel* w, int position);
+void rotateWheel(struct wheel* w, int steps);
+void rotateWheels(struct wheel** wheels, int wheelsCount);
+void wheelDelete(struct wheel* w);
 void wheelPrint(struct wheel* w);
+int letterToIndex(char letter);
+char indexToletter(int index);
+char encryptWheel(struct wheel* w, char letter);
+char decryptWheel(struct wheel* w, char letter);
+char encryptOneLetter(struct littleEnigma* le, char letter);
+char decryptOneLetter(struct littleEnigma* le, char letter);
+
 
 int strLen(char* src) {
 
@@ -45,35 +66,51 @@ char* strDup(char* src) {
 }
 
 struct littleEnigma* littleEnigmaNew(char** alphabetPermutation, int count){
+    struct littleEnigma* res = (struct littleEnigma*) malloc(sizeof(struct littleEnigma));
+    struct wheel** ruedas = (struct wheel**) malloc(sizeof(struct wheel) * count);
+    for (int i = 0; i < count; i++) {
+        ruedas[i] = makeWheelFromString(alphabetPermutation[i]);
 
-    // COMPLETAR
 
-    return 0;
+    }
+    res->wheels = ruedas;
+    res->wheelsCount = count;
+
+    return res;
 }
 
 void littleEnigmaSet(struct littleEnigma* le, int* password) {
 
-    // COMPLETAR
+    for (int i = 0; i < le->wheelsCount; i++){
+        setWheel(le->wheels[i], password[i]);
+    }
 }
 
 char* littleEnigmaEncrypt(struct littleEnigma* le, char* text){
-
-    // COMPLETAR
-
-    return 0;
+    int length = strLen(text);
+    char* res = (char*) malloc(sizeof(char) * length);
+    for(int i=0; i < length; i++){
+        res[i] = encryptOneLetter(le, text[i]);
+    }
+    return res;
 }
 
 char* littleEnigmaDecrypt(struct littleEnigma* le, char* code) {
+    int length = strLen(code);
+    char* res = (char*) malloc(sizeof(char) * length);
+    for(int i=0; i < length; i++){
+        res[i] = decryptOneLetter(le, code[i]);
+    }
+    return res;
 
-    // COMPLETAR
-
-    return 0;
 }
 
 void littleEnigmaDelete(struct littleEnigma* le) {
-
-    // COMPLETAR
-
+    for(int i=0; i< le->wheelsCount; i++){
+        wheelDelete(le->wheels[i]);
+    }
+    free(le->wheels);
+    free(le);
 }
 
 void littleEnigmaPrint(struct littleEnigma* le) {
@@ -134,9 +171,21 @@ void rotateWheel(struct wheel* w, int steps) {
 }
 
 void rotateWheels(struct wheel** wheels, int wheelsCount) {
-
-    // COMPLETAR
-
+    int i = 0;
+    int running = 1; // variable seteada True
+    while (running) {
+        rotateWheel(wheels[i], 1);
+        if (wheels[i]->first->position != 0) {
+            running = 0; // break;
+        }
+        i++;
+    }
+    // for (int i = 0; i < wheelsCount; i++) {
+    //     rotateWheel(wheels[i], 1);
+    //     if (wheels[i]->first->position != 0) {
+    //         break;
+    //     }
+    // }
 }
 
 void wheelDelete(struct wheel* w) {
@@ -197,17 +246,21 @@ char decryptWheel(struct wheel* w, char letter) {
 }
 
 char encryptOneLetter(struct littleEnigma* le, char letter) {
-
-    // COMPLETAR
-
-    return 0;
+    char res = letter;
+    for (int i = 0; i < le->wheelsCount; i++) {
+        res = encryptWheel(le->wheels[i], res);
+    }
+    rotateWheels(le->wheels, 1);
+    return res;
 }
 
 char decryptOneLetter(struct littleEnigma* le, char letter) {
-
-    // COMPLETAR
-
-    return 0;
+    char res = letter;
+    for (int i = le->wheelsCount-1; i >= 0; i--) {
+        res = decryptWheel(le->wheels[i], res);
+    }
+    rotateWheels(le->wheels, 1);
+    return res;
 }
 
 int main () {
@@ -238,5 +291,36 @@ int main () {
     printf("Borrando rueda...\n");
     wheelDelete(w);
     printf("\n\n");
+
+   // littleEnigma
+    char* alphabetPermutation[2];
+    alphabetPermutation[0] = "JGDQOXUSCAMIFRVTPNEWKBLZYH";
+    alphabetPermutation[1] = "NTZPSFBOKMWRCJDIVLAEYUXHGQ";
+    struct littleEnigma* le = littleEnigmaNew(alphabetPermutation, 2);
+    littleEnigmaPrint(le);
+    printf("\n\n");
+
+    int password[2] = { 3, 5 };
+    littleEnigmaSet(le, password);
+    littleEnigmaPrint(le);
+    printf("\n\n");
+
+    char* text = "HOLA";
+    char* code = littleEnigmaEncrypt(le, text);
+    littleEnigmaPrint(le);
+    printf("%s -> %s\n\n", text, code);
+
+    littleEnigmaSet(le, password);
+    littleEnigmaPrint(le);
+    printf("\n\n");
+
+    char* decode = littleEnigmaDecrypt(le, code);
+    littleEnigmaPrint(le);
+    printf("%s -> %s -> %s\n\n", text, code, decode);
+
+    if(code) free(code);
+    if(decode) free(decode);
+
+    littleEnigmaDelete(le);
 
 }
