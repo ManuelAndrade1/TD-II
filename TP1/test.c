@@ -194,7 +194,7 @@ void rotateWheel(struct wheel* w, int steps) {
 void rotateWheels(struct wheel** wheels, int wheelsCount) {
     int i = 0;
     int running = 1; // Variable seteada True
-    while (running) {
+    while (running && i != wheelsCount) {
         rotateWheel(wheels[i], 1);
         if (wheels[i]->first->position != 0) {
             running = 0; // Rompe el ciclo;
