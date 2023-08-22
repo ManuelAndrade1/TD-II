@@ -16,11 +16,11 @@ char* copy(char* s) {
     while (s[length] != '\0') {
         length++;
     }
-    char *p = (char*) malloc(sizeof(char*) * length);
+    char *p = (char*) malloc(sizeof(char*) * (length+1));
     for (int i = 0; i < length+1; i++) {
         p[i] = s[i];
     }
-    
+    p[length] = '\0';
     return p;
 }
 
@@ -41,7 +41,7 @@ char* concatenate(char* s1, char* s2) {
     int size2 = len(s2);
     int pos = size1-1; // Posicion del string res en la que termina el s1.
 
-    char *res = (char*) malloc(sizeof(char) * (size1 + size2));
+    char *res = (char*) malloc(sizeof(char) * (size1 + size2 + 1));
     for (int i = 0; i < size1; i++){
         res[i] = s1[i];
     }
@@ -50,6 +50,7 @@ char* concatenate(char* s1, char* s2) {
         res[pos] = s2[j];
 
     }
+    res[size1+size2] = '\0';
     return res;
 }
 
