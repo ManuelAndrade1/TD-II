@@ -56,7 +56,7 @@ int strLen(char* src) {
 char* strDup(char* src) {
 
     int length = strLen(src);
-    char *res = (char*) malloc(sizeof(char) * length);
+    char *res = (char*) malloc(sizeof(char) * (length+1));
     
     for (int i = 0; src[i] != 0; i++) {
         res[i] = src[i];
@@ -89,24 +89,26 @@ void littleEnigmaSet(struct littleEnigma* le, int* password) {
 char* littleEnigmaEncrypt(struct littleEnigma* le, char* text){
 
     int length = strLen(text);
-    char* res = (char*) malloc(sizeof(char) * length);
+    char* res = (char*) malloc(sizeof(char) * (length+1));
 
     // Itera caracter a caracter y encripta 1 a 1
     for(int i = 0; i < length; i++){
         res[i] = encryptOneLetter(le, text[i]);
     }
+    res[length] = '\0';
     return res;
 }
 
 char* littleEnigmaDecrypt(struct littleEnigma* le, char* code) {
 
     int length = strLen(code);
-    char* res = (char*) malloc(sizeof(char) * length);
+    char* res = (char*) malloc(sizeof(char) * (length+1));
 
     // Itera caracter a caracter y desencripta 1 a 1
     for(int i = 0; i < length; i++){
         res[i] = decryptOneLetter(le, code[i]);
     }
+    res[length] = '\0';
     return res;
 
 }
@@ -192,7 +194,7 @@ void rotateWheel(struct wheel* w, int steps) {
 void rotateWheels(struct wheel** wheels, int wheelsCount) {
     int i = 0;
     int running = 1; // Variable seteada True
-    while (running) {
+    while (running && i != wheelsCount) {
         rotateWheel(wheels[i], 1);
         if (wheels[i]->first->position != 0) {
             running = 0; // Rompe el ciclo;
