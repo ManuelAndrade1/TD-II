@@ -106,7 +106,7 @@ struct wheel* makeWheelFromString(char* alphabetPermutation) {
 
     newWheel->alphabet = strDup(alphabetPermutation);
     newWheel->count = strLen(alphabetPermutation);
-    struct letter* last = (struct letter*) malloc(sizeof(struct letter));
+    struct letter* last = NULL;
     // Itera letra a letra del alfabeto pasado y crea la lista circular
     for (int i = 0; i < newWheel->count; i++) {
         struct letter* l = (struct letter*) malloc(sizeof(struct letter));

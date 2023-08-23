@@ -84,7 +84,11 @@ int main() {
     wheelPrint(w1);
     printf("\n\n");
 
-
+    wheelDelete(w1);
+    wheelDelete(w2);
+    wheelDelete(w3);
+    wheelDelete(w4);
+    
     // littleEnigma
     char* alphabetPermutation[2];
     alphabetPermutation[0] = "JGDQOXUSCAMIFRVTPNEWKBLZYH";
