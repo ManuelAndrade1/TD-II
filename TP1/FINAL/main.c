@@ -89,7 +89,61 @@ int main() {
     wheelDelete(w3);
     wheelDelete(w4);
     
-    // littleEnigma
+    // Test de littleEnigma
+
+    char* empty_str = "";
+    char* long_str = "BUENOSDIASTODOBIENTEQUERIAPREGUNTAR";
+    char* medium_str = "BUENOSDIAS";
+
+
+    // Creamos las maquinas
+
+    // 1 disco
+    char** permutation_test = "POIUYTREWQLKJHGFDSAMNBVCXZ";
+    struct littleEnigma* le_test = littleEnigmaNew(permutation_test, 1);
+    printf("Maquina enigma de 1 disco:\n");
+    littleEnigmaPrint(le_test);
+    printf("\n\n");
+
+    // 3 discos
+    char *permutation_test2[3];
+    permutation_test2[0] = "QWERTYUIOPASDFGHJKLZXCVBNM";
+    permutation_test2[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
+    permutation_test2[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
+    struct littleEnigma* le_test2 = littleEnigmaNew(permutation_test2, 3);
+    printf("Maquina enigma de 3 discos:\n");
+    littleEnigmaPrint(le_test2);
+    printf("\n\n");
+
+    // 5 discos
+
+    char* permutation_test3[5];
+    permutation_test3[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
+    permutation_test3[1] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
+    permutation_test3[2] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
+    permutation_test3[3] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
+    permutation_test3[4] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
+    struct littleEnigma* le_test3 = littleEnigmaNew(permutation_test3, 5);
+    printf("Maquina enigma de 5 discos:\n");
+    littleEnigmaPrint(le_test3);
+    printf("\n\n");
+
+    // 8 discos
+    char* permutation_test4[8];
+    permutation_test3[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
+    permutation_test2[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
+    permutation_test2[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
+    permutation_test3[3] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
+    permutation_test3[4] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
+    permutation_test2[5] = "QWERTYUIOPASDFGHJKLZXCVBNM";    
+    permutation_test3[6] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
+    permutation_test3[7] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
+    struct littleEnigma* le_test4 = littleEnigmaNew(permutation_test4, 8);
+    printf("Maquina enigma de 8 discos:\n");
+    littleEnigmaPrint(le_test4);
+    printf("\n\n");
+
+    /*
     char* alphabetPermutation[2];
     alphabetPermutation[0] = "JGDQOXUSCAMIFRVTPNEWKBLZYH";
     alphabetPermutation[1] = "NTZPSFBOKMWRCJDIVLAEYUXHGQ";
@@ -119,6 +173,6 @@ int main() {
     if(decode) free(decode);
 
     littleEnigmaDelete(le);
-
+    */
     return 0;
 }
