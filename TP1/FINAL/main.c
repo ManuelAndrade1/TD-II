@@ -91,28 +91,42 @@ int main() {
     
     // Test de littleEnigma
 
-    char* empty_str = "";
-    char* long_str = "BUENOSDIASTODOBIENTEQUERIAPREGUNTAR";
-    char* medium_str = "BUENOSDIAS";
+    char* emptyStr = "";
+    char* longStr = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    char* mediumStr = "BUENOSDIAS";
 
 
-    // Creamos las maquinas
+    // Creamos las y setteamos las maquinas
 
     // 1 disco
-    char** permutation_test = "POIUYTREWQLKJHGFDSAMNBVCXZ";
-    struct littleEnigma* le_test = littleEnigmaNew(permutation_test, 1);
+    char* permutation_test[1];
+    permutation_test[0] = "POIUYTREWQLKJHGFDSAMNBVCXZ";
+    struct littleEnigma* leTest = littleEnigmaNew(permutation_test, 1);
     printf("Maquina enigma de 1 disco:\n");
-    littleEnigmaPrint(le_test);
+    littleEnigmaPrint(leTest);
     printf("\n\n");
+
+    int password[1] = {10};
+    littleEnigmaSet(leTest, password);
+    printf("Maquina luego de inicializarla:\n");
+    littleEnigmaPrint(leTest);
+    printf("\n\n");
+
 
     // 3 discos
     char *permutation_test2[3];
     permutation_test2[0] = "QWERTYUIOPASDFGHJKLZXCVBNM";
     permutation_test2[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
     permutation_test2[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
-    struct littleEnigma* le_test2 = littleEnigmaNew(permutation_test2, 3);
+    struct littleEnigma* leTest2 = littleEnigmaNew(permutation_test2, 3);
     printf("Maquina enigma de 3 discos:\n");
-    littleEnigmaPrint(le_test2);
+    littleEnigmaPrint(leTest2);
+    printf("\n\n");
+
+    int password2[3] = {12, 9, 6};
+    littleEnigmaSet(leTest2, password2);
+    printf("Maquina luego de inicializarla:\n");
+    littleEnigmaPrint(leTest2);
     printf("\n\n");
 
     // 5 discos
@@ -123,25 +137,108 @@ int main() {
     permutation_test3[2] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
     permutation_test3[3] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
     permutation_test3[4] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
-    struct littleEnigma* le_test3 = littleEnigmaNew(permutation_test3, 5);
+    struct littleEnigma* leTest3 = littleEnigmaNew(permutation_test3, 5);
     printf("Maquina enigma de 5 discos:\n");
-    littleEnigmaPrint(le_test3);
+    littleEnigmaPrint(leTest3);
+    printf("\n\n");
+
+    int password3[5] = {20, 0, 1, 25, 23};
+    littleEnigmaSet(leTest3, password3);
+    printf("Maquina luego de inicializarla:\n");
+    littleEnigmaPrint(leTest3);
     printf("\n\n");
 
     // 8 discos
     char* permutation_test4[8];
-    permutation_test3[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
-    permutation_test2[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
-    permutation_test2[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
-    permutation_test3[3] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
-    permutation_test3[4] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
-    permutation_test2[5] = "QWERTYUIOPASDFGHJKLZXCVBNM";    
-    permutation_test3[6] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
-    permutation_test3[7] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
-    struct littleEnigma* le_test4 = littleEnigmaNew(permutation_test4, 8);
+    permutation_test4[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
+    permutation_test4[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
+    permutation_test4[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
+    permutation_test4[3] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
+    permutation_test4[4] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
+    permutation_test4[5] = "QWERTYUIOPASDFGHJKLZXCVBNM";    
+    permutation_test4[6] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
+    permutation_test4[7] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
+    struct littleEnigma* leTest4 = littleEnigmaNew(permutation_test4, 8);
     printf("Maquina enigma de 8 discos:\n");
-    littleEnigmaPrint(le_test4);
+    littleEnigmaPrint(leTest4);
     printf("\n\n");
+
+    int password4[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    littleEnigmaSet(leTest4, password4);
+    printf("Maquina luego de inicializarla:\n");
+    littleEnigmaPrint(leTest4);
+    printf("\n\n");    
+
+    // Encriptar y desencriptar string vacio
+    char* testCode = littleEnigmaEncrypt(leTest, emptyStr);
+    littleEnigmaSet(leTest, password);
+    char* testDecode = littleEnigmaDecrypt(leTest, testCode);
+    littleEnigmaSet(leTest, password);
+    printf("Encriptar y desencriptar string vacio:\n");
+    printf("Encriptar \"%s\" -> \"%s\"\n", emptyStr, testCode);
+    printf("Desencriptar: \"%s\" -> \"%s\"\n", testCode, testDecode);
+    printf("\n\n");
+
+    // Encriptar y desencriptar mensaje 35 caracteres iguales
+    char* testCode2 = littleEnigmaEncrypt(leTest, longStr);
+    littleEnigmaSet(leTest, password);
+    char* testDecode2 = littleEnigmaDecrypt(leTest, testCode2);
+    littleEnigmaSet(leTest, password);
+    printf("Encriptar y desencriptar 35 caracteres iguales:\n");
+    printf("Encriptar \"%s\" -> \"%s\"\n", longStr, testCode2); 
+    printf("Desencriptar: \"%s\" -> \"%s\"\n", testCode2, testDecode2);
+    printf("\n\n");
+
+    // Encriptar y desencriptar mensaje de 10 caracteres en enigma de 3 discos
+    char* testCode3 = littleEnigmaEncrypt(leTest2, mediumStr);
+    littleEnigmaSet(leTest2, password2);
+    char* testDecode3 = littleEnigmaDecrypt(leTest2, testCode3);
+    littleEnigmaSet(leTest2, password2);
+    printf("Encriptar y desencriptar 10 caracteres en maquina de 3 discos:\n");
+    printf("Encriptar \"%s\" -> \"%s\"\n", mediumStr, testCode3);
+    printf("Desencriptar: \"%s\" -> \"%s\"\n", testCode3, testDecode3);
+    printf("\n\n");
+
+    // Encriptar y desencriptar mensaje de 10 caracteres en enigma de 5 discos
+    char* testCode4 = littleEnigmaEncrypt(leTest3, mediumStr);
+    littleEnigmaSet(leTest3, password3);
+    char* testDecode4 = littleEnigmaDecrypt(leTest3, testCode4);
+    littleEnigmaSet(leTest3, password3);
+    printf("Encriptar y desencriptar 10 caracteres en maquina de 5 discos:\n");
+    printf("Encriptar \"%s\" -> \"%s\"\n", mediumStr, testCode4);
+    printf("Desencriptar: \"%s\" -> \"%s\"\n", testCode4, testDecode4);
+    printf("\n\n");
+
+    // Encriptar y desencriptar mensaje de 10 caracteres en enigma de 8 discos
+    char* testCode5 = littleEnigmaEncrypt(leTest4, mediumStr);
+    littleEnigmaSet(leTest4, password4);
+    char* testDecode5 = littleEnigmaDecrypt(leTest4, testCode5);
+    littleEnigmaSet(leTest4, password4);
+    printf("Encriptar y desencriptar 10 caracteres en maquina de 8 discos:\n");
+    printf("Encriptar \"%s\" -> \"%s\"\n", mediumStr, testCode5);
+    printf("Desencriptar: \"%s\" -> \"%s\"\n", testCode5, testDecode5);
+    printf("\n\n");
+
+
+    littleEnigmaDelete(leTest);
+    littleEnigmaDelete(leTest2);
+    littleEnigmaDelete(leTest3);
+    littleEnigmaDelete(leTest4);
+
+    if (testCode) free(testCode);
+    if (testDecode) free(testDecode);
+
+    if (testCode2) free(testCode2);
+    if (testDecode2) free(testDecode2);
+
+    if (testCode3) free(testCode3);
+    if (testDecode3) free(testDecode3);
+
+    if (testCode3) free(testCode4);
+    if (testDecode3) free(testDecode4);
+
+    if (testCode4) free(testCode5);
+    if (testDecode4) free(testDecode5);
 
     /*
     char* alphabetPermutation[2];
