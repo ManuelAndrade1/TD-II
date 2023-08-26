@@ -14,6 +14,7 @@ int main() {
     char* strTest1 =  "";
     char* strTest2 = "c";
     char* strTest3 = "123456789qwertyuiopasdfghjklzxcvbnm<!@#$^&*()_+=>,.;:'[]{}";
+    
     // strLen
     int test1 = strLen(strTest1);
     int test2 = strLen(strTest2);
@@ -99,9 +100,9 @@ int main() {
     // Creamos las y setteamos las maquinas
 
     // 1 disco
-    char* permutation_test[1];
-    permutation_test[0] = "POIUYTREWQLKJHGFDSAMNBVCXZ";
-    struct littleEnigma* leTest = littleEnigmaNew(permutation_test, 1);
+    char* permutationTest[1];
+    permutationTest[0] = "POIUYTREWQLKJHGFDSAMNBVCXZ";
+    struct littleEnigma* leTest = littleEnigmaNew(permutationTest, 1);
     printf("Maquina enigma de 1 disco:\n");
     littleEnigmaPrint(leTest);
     printf("\n\n");
@@ -114,11 +115,11 @@ int main() {
 
 
     // 3 discos
-    char *permutation_test2[3];
-    permutation_test2[0] = "QWERTYUIOPASDFGHJKLZXCVBNM";
-    permutation_test2[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
-    permutation_test2[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
-    struct littleEnigma* leTest2 = littleEnigmaNew(permutation_test2, 3);
+    char *permutationTest2[3];
+    permutationTest2[0] = "QWERTYUIOPASDFGHJKLZXCVBNM";
+    permutationTest2[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
+    permutationTest2[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
+    struct littleEnigma* leTest2 = littleEnigmaNew(permutationTest2, 3);
     printf("Maquina enigma de 3 discos:\n");
     littleEnigmaPrint(leTest2);
     printf("\n\n");
@@ -130,14 +131,13 @@ int main() {
     printf("\n\n");
 
     // 5 discos
-
-    char* permutation_test3[5];
-    permutation_test3[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
-    permutation_test3[1] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
-    permutation_test3[2] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
-    permutation_test3[3] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
-    permutation_test3[4] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
-    struct littleEnigma* leTest3 = littleEnigmaNew(permutation_test3, 5);
+    char* permutationTest3[5];
+    permutationTest3[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
+    permutationTest3[1] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
+    permutationTest3[2] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
+    permutationTest3[3] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
+    permutationTest3[4] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
+    struct littleEnigma* leTest3 = littleEnigmaNew(permutationTest3, 5);
     printf("Maquina enigma de 5 discos:\n");
     littleEnigmaPrint(leTest3);
     printf("\n\n");
@@ -149,16 +149,16 @@ int main() {
     printf("\n\n");
 
     // 8 discos
-    char* permutation_test4[8];
-    permutation_test4[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
-    permutation_test4[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
-    permutation_test4[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
-    permutation_test4[3] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
-    permutation_test4[4] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
-    permutation_test4[5] = "QWERTYUIOPASDFGHJKLZXCVBNM";    
-    permutation_test4[6] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
-    permutation_test4[7] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
-    struct littleEnigma* leTest4 = littleEnigmaNew(permutation_test4, 8);
+    char* permutationTest4[8];
+    permutationTest4[0] = "QAWSEDRFTGYHUJIKOLPZXCVBNM";
+    permutationTest4[1] = "ASDFGHJKLZXCVBNMQWERTYUIOP";
+    permutationTest4[2] = "PQWOIERUTYALKSJDFHGZMNXCBV";
+    permutationTest4[3] = "ZAXSCDVFBGNHMJKLQOWPERTYUI";
+    permutationTest4[4] = "ZAQXSWCDEVFRBGTNHYMJUKILOP";
+    permutationTest4[5] = "QWERTYUIOPASDFGHJKLZXCVBNM";    
+    permutationTest4[6] = "PLOKMIJNUHBYGVTFCRDXESZWAQ";
+    permutationTest4[7] = "QPALWOSKIEDJRUFHTYGZMNXCBV";
+    struct littleEnigma* leTest4 = littleEnigmaNew(permutationTest4, 8);
     printf("Maquina enigma de 8 discos:\n");
     littleEnigmaPrint(leTest4);
     printf("\n\n");
@@ -220,6 +220,7 @@ int main() {
     printf("\n\n");
 
 
+    // Borramos todas las estructuras
     littleEnigmaDelete(leTest);
     littleEnigmaDelete(leTest2);
     littleEnigmaDelete(leTest3);
@@ -240,36 +241,5 @@ int main() {
     if (testCode4) free(testCode5);
     if (testDecode4) free(testDecode5);
 
-    /*
-    char* alphabetPermutation[2];
-    alphabetPermutation[0] = "JGDQOXUSCAMIFRVTPNEWKBLZYH";
-    alphabetPermutation[1] = "NTZPSFBOKMWRCJDIVLAEYUXHGQ";
-    struct littleEnigma* le = littleEnigmaNew(alphabetPermutation, 2);
-    littleEnigmaPrint(le);
-    printf("\n\n");
-
-    int password[2] = { 3, 5 };
-    littleEnigmaSet(le, password);
-    littleEnigmaPrint(le);
-    printf("\n\n");
-
-    char* text = "TEXT";
-    char* code = littleEnigmaEncrypt(le, text);
-    littleEnigmaPrint(le);
-    printf("%s -> %s\n\n", text, code);
-
-    littleEnigmaSet(le, password);
-    littleEnigmaPrint(le);
-    printf("\n\n");
-
-    char* decode = littleEnigmaDecrypt(le, code);
-    littleEnigmaPrint(le);
-    printf("%s -> %s -> %s\n\n", text, code, decode);
-
-    if(code) free(code);
-    if(decode) free(decode);
-
-    littleEnigmaDelete(le);
-    */
     return 0;
 }

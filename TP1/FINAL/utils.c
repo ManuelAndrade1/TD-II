@@ -1,6 +1,7 @@
 #include "utils.h"
 
 int strLen(char* src) {
+
     int res = 0;
 
     for (int i = 0; src[i] != 0; i++) {
@@ -25,13 +26,13 @@ char* strDup(char* src) {
 struct littleEnigma* littleEnigmaNew(char** alphabetPermutation, int count){
 
     struct littleEnigma* res = (struct littleEnigma*) malloc(sizeof(struct littleEnigma));
-    struct wheel** ruedas = (struct wheel**) malloc(sizeof(struct wheel) * count);
+    struct wheel** wheels = (struct wheel**) malloc(sizeof(struct wheel) * count);
 
     // Itera tantas veces como ruedas se necesiten crear
     for (int i = 0; i < count; i++) {
-        ruedas[i] = makeWheelFromString(alphabetPermutation[i]);
+        wheels[i] = makeWheelFromString(alphabetPermutation[i]);
     }
-    res->wheels = ruedas;
+    res->wheels = wheels;
     res->wheelsCount = count;
     return res;
 }
@@ -107,19 +108,20 @@ struct wheel* makeWheelFromString(char* alphabetPermutation) {
     newWheel->alphabet = strDup(alphabetPermutation);
     newWheel->count = strLen(alphabetPermutation);
     struct letter* last = NULL;
+
     // Itera letra a letra del alfabeto pasado y crea la lista circular
     for (int i = 0; i < newWheel->count; i++) {
         struct letter* l = (struct letter*) malloc(sizeof(struct letter));
         l->letter = alphabetPermutation[i];
         l->position = i;
         l->next = NULL;
-        if (i == 0) {
+        if (i == 0) { // Caso primer letra
             newWheel->first = l;
         }
         else { // Conecta las letras con su respectiva siguiente
             addLast(newWheel->first, l);
         }
-        last = l; // Hacemos esto para tener un puntero al ultimo elemento de la lista y conectarlo al primero
+        last = l; // Guardamos un puntero al ultimo elemento de la lista y conectarlo al primero
     }
     last->next = newWheel->first;
     return newWheel;
@@ -136,7 +138,7 @@ void setWheel(struct wheel* w, int position) {
 void rotateWheel(struct wheel* w, int steps) {
 
     struct letter* temp = w->first;
-
+    // Giramos la rueda "steps" veces
     for (int i = 0; i < steps; i++) {
         temp = temp->next;
     }
@@ -150,6 +152,7 @@ void rotateWheels(struct wheel** wheels, int wheelsCount) {
     int running = 1; // Variable seteada True
     while (running && i != wheelsCount) {
         rotateWheel(wheels[i], 1);
+        // Si no se completa una vuelta al disco
         if (wheels[i]->first->position != 0) {
             running = 0; // Rompe el ciclo;
         }
