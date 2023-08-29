@@ -129,6 +129,7 @@ struct wheel* makeWheelFromString(char* alphabetPermutation) {
 
 void setWheel(struct wheel* w, int position) {
     struct letter* current = w->first;
+    position = position % w->count;
     while(current->position != position) {
         current = current->next;
     }
