@@ -104,9 +104,9 @@ void firstToLast(struct pair* p){
     temp->next->next = 0;
 
 }
-void removeAndRotate(struct pair* p) {
-    changeFirst(p);
-    firstToLast(p);
+void removeAndRotate(struct pair** p) {
+    changeFirst(*p);
+    firstToLast(*p);
 }
 
 int main() {
@@ -128,7 +128,7 @@ int main() {
     addLast(s, 1, d6);
     addLast(s, 1, d7);
     printPair(s);
-    removeAndRotate(s);
+    removeAndRotate(&s);
     printPair(s);
     deletePair(s);
 
