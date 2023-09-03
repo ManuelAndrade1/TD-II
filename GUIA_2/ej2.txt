@@ -1,0 +1,16 @@
+a. 5 datos mas que el sistema podria almacenar serian:
+- El id del proceso en si
+- Un contador, es decir la siguiente instruccion a ser ejecutada
+- Requisitos del CPU 
+- Info de prioridad del proceso
+- Info de entrada salida
+
+b.
+1- Se guarda el estado del proceso en ejecucion en su PCB
+2- Se mueve el proceso a la cola de preparados/en espera/terminados
+3. Se agarra el proximo PCB en la cola de preparados y se le asignan los recursos del CPU
+
+
+c. Los datos del PCB se utilizan tanto para guardar el estado del proceso viejo (paso 1), como para 
+poder cargar los datos del proceso nuevo (paso 3).
+

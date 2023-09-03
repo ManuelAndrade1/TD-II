@@ -1,0 +1,11 @@
+Si existe una diferencia a nivel de sistema 
+operativo entre ejecutar una sys call y llamar
+a una funcion de libreria. Al llamar a una sys call,
+se produce un cambio de privilegio para poder ejecutar 
+la funcion pedida. Sin embargo, a la hora de llamar a una 
+funcion de liberia, se mantiene el mismo nivel de privilegio de 
+usuario.
+Obs: Si bien no hay un cambio de privilegio al llamar a una funcion
+de libreria, para que esta realice las tareas que necesita, si se precisara
+de un cambio de contexto en algun momento.
+
