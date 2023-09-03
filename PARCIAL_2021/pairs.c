@@ -16,7 +16,7 @@ void addLast(struct pair* p, int index, int* arr) {
     for (int i = 0; i < 3; i++) {
         new->data[i] = arr[i];
     }
-    new->next = 0;
+    new->next = NULL;
     if (index == 0 && p->first == 0) {
         p->first = new; 
         return;
@@ -60,10 +60,12 @@ void printPair(struct pair* p) {
 }
 
 void deleteBranch(struct node* n) {
-    while (n != 0){
-        struct node* temp = n;
-        n = n-> next;
-        free(temp);
+    struct node* temp = n;
+    struct node* prev = n;
+    while (temp != 0) {
+        temp = temp->next;
+        free(prev);
+        prev = temp;
     }
 } 
 
@@ -80,6 +82,8 @@ void changeFirst(struct pair* p) {
 
     p->first = p->first->next;
     p->second = p->second->next;
+    free(temp);
+    free(temp2);
     return;
 }
 void firstToLast(struct pair* p){
@@ -127,4 +131,5 @@ int main() {
     removeAndRotate(s);
     printPair(s);
     deletePair(s);
+
 }
