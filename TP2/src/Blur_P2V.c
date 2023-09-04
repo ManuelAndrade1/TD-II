@@ -14,6 +14,11 @@ uint32_t height;
 uint8_t* data;
 uint8_t* result;
 
+
+static void* process2(__attribute__((unused)) void* _) {
+  step_blur3(width, height, data, result, 1, width/2, 1, height-2);
+}
+
 int main(int argc, char **argv) {
 
   char* inputFileName;
@@ -32,7 +37,17 @@ int main(int argc, char **argv) {
   step_copy(width, height, data, result, 0, width-1, 0, height-1);
   
   // Procesamiento de la imagen
-  // COMPLETAR
+  for(int i = 0; i<count; i++) {
+    uint8_t* tmp;
+    pthread_t thread;
+    pthread_create(&thread, NULL, process2, NULL);
+    step_blur3(width, height, data, result, width/2+1, width-2, 1, height-2);
+    pthread_join(thread, NULL);
+    tmp = data;
+    data = result;
+    result = tmp;
+  }
+  paintEdges(width, height, result);
 
   // Liberacion de memoria
   free(data);
