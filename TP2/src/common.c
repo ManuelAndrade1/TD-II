@@ -31,11 +31,11 @@ void loadImageAndParams(int argc, char **argv, char** inputFile, char** outputFi
   uint16_t bits = bmp_bit_count(*image);
   uint32_t compress = bmp_compression(*image);
   
-  printf("ancho: %i pixeles\n",width);
-  printf("alto:  %i pixeles\n",height);
-  printf("ancho en bytes: %i bytes\n",bytes);
-  printf("bits por pixel: %i bits\n",bits);
-  printf("compress codel: %i\n",compress);
+  // printf("ancho: %i pixeles\n",width);
+  // printf("alto:  %i pixeles\n",height);
+  // printf("ancho en bytes: %i bytes\n",bytes);
+  // printf("bits por pixel: %i bits\n",bits);
+  // printf("compress codel: %i\n",compress);
 
   if(compress != 3 || bits != 32) {
     printf("Error: Tipo de imagen no soportado");
