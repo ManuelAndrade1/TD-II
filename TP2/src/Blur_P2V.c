@@ -14,7 +14,7 @@ uint32_t height;
 uint8_t* data;
 uint8_t* result;
 
-
+// Definimos proceso paralelo
 static void* process2(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width/2, 1, height-2);
 }
@@ -40,8 +40,10 @@ int main(int argc, char **argv) {
   for(int i = 0; i<count; i++) {
     uint8_t* tmp;
     pthread_t thread;
-    pthread_create(&thread, NULL, process2, NULL);
+    // Creamos el segundo thread
+    pthread_create(&thread, NULL, process2, NULL); 
     step_blur3(width, height, data, result, width/2+1, width-2, 1, height-2);
+    // Esperamos a que el thread termine
     pthread_join(thread, NULL);
     tmp = data;
     data = result;
