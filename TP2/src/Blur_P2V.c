@@ -14,7 +14,12 @@ uint32_t height;
 uint8_t* data;
 uint8_t* result;
 
-// Definimos proceso paralelo
+/*
+Definimos proceso (thread) paralelo
+El proceso iterara sobre la primera mitad de la imagen de forma vertical, yendo desde el pixel más bajo al más alto
+de la imagen, cubriendo solamente la priemra mitad de la misma. 
+*/ 
+
 static void* process2(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width/2, 1, height-2);
 }
@@ -42,6 +47,7 @@ int main(int argc, char **argv) {
     pthread_t thread;
     // Creamos el segundo thread
     pthread_create(&thread, NULL, process2, NULL); 
+    // El proceso padre iterará sobre la segunda mitad de la imagen, siguiendo la mima idea que el thread (del px más bajo al más alto).
     step_blur3(width, height, data, result, width/2+1, width-2, 1, height-2);
     // Esperamos a que el thread termine
     pthread_join(thread, NULL);
