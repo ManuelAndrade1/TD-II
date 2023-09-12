@@ -68,7 +68,7 @@ float average(struct node* n) {
     for (int i = 0; i < n->len; i++) {
         count += n->data[i];
     }
-    float avg = count / n->len;
+    float avg = (float) count / n->len;
     return avg;
 }
 void getGreatestAverageArray(struct list* list, int** data) {
@@ -82,6 +82,7 @@ void getGreatestAverageArray(struct list* list, int** data) {
     while (curr != 0) {
         float avg_tmp = average(curr);
         if (avg_tmp > avg) {
+            avg = avg_tmp;
             *data = curr->data;
         }
         curr = curr->next;
@@ -112,7 +113,7 @@ int main () {
     ls->first = 0;
     int arr[3] = {1, 2, 3};
     int arr2[2] = {10, 10};
-    int** d;
+    int** d = (int**) malloc(sizeof(int*));
     *d = 0;
     addLast(ls, arr, 3);
     addLast(ls, arr2, 2);
@@ -120,5 +121,6 @@ int main () {
     findArray(ls, *d);
     printList(ls);
     deleteList(ls);
+    free(d);
     return 0;
 }
