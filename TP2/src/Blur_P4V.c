@@ -14,14 +14,18 @@ uint32_t height;
 uint8_t* data;
 uint8_t* result;
 
+/*
+Definimos 3 procesos (threads) paralelos
+Cada uno de los threads definidos + el padre iterarán sobre 1/4 de la imagen
+de manera vertical. Para lograr esto, dividimos la imagen en 4 trozos iguales de forma
+que cada thread itere sobre 1/4 del ancho de la imagen. 
+*/
 static void* process2(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width/4, 1, height-2);
 }
-
 static void* process3(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, width/4+1, width/2, 1, height-2);
 }
-
 static void* process4(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, width/2+1, 3*(width/4), 1, height-2);
 }
@@ -47,10 +51,13 @@ int main(int argc, char **argv) {
   for(int i = 0; i<count; i++) {
     uint8_t* tmp;
     pthread_t thread, thread2, thread3;
+    // Creamos los 4 threads (3 paralelos + padre)
     pthread_create(&thread, NULL, process2, NULL);
     pthread_create(&thread2, NULL, process3, NULL);
     pthread_create(&thread3, NULL, process4, NULL);
+    // El proceso principal o padre itera sobre el último cuarto de la imagen.
     step_blur3(width, height, data, result, 3*(width/4)+1, width-2, 1, height-2);
+    // Esperamos la terminacion de los threads
     pthread_join(thread, NULL);
     pthread_join(thread2, NULL);
     pthread_join(thread3, NULL);

@@ -14,14 +14,18 @@ uint32_t height;
 uint8_t* data;
 uint8_t* result;
 
+/*
+Definimos 3 procesos (threads) paralelos
+Para la implementación de este programa, dividimos la imagen en 4 cuadrantes,
+cada uno representando 1/4 de la imagen. El primer proceso iterará sobre el primer cuadrante,
+el segundo sobre el segundo cuadrante, y así con cada uno de los threads.
+*/ 
 static void* process2(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width/2, 1, height/2);
 }
-
 static void* process3(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, width/2+1, width-2, 1, height/2);
 }
-
 static void* process4(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width/2, height/2+1, height-2);
 }
@@ -48,10 +52,13 @@ int main(int argc, char **argv) {
   for(int i = 0; i<count; i++) {
     uint8_t* tmp;
     pthread_t thread, thread2, thread3;
+    // Creamos 4 threads (3 paralelos + padre)
     pthread_create(&thread, NULL, process2, NULL);
     pthread_create(&thread2, NULL, process3, NULL);
     pthread_create(&thread3, NULL, process4, NULL);
+    // El thread principal (padre) itera sobre el último cuadrante. 
     step_blur3(width, height, data, result, width/2+1, width-2, height/2+1, height-2);
+    // Esperamos la terminacion de los threads
     pthread_join(thread, NULL);
     pthread_join(thread2, NULL);
     pthread_join(thread3, NULL);

@@ -14,14 +14,18 @@ uint32_t height;
 uint8_t* data;
 uint8_t* result;
 
+/*
+Definimos 3 procesos (threads) paralelos
+Cada uno de los threads definidos + el proceso padre, realizarán el proceso de "blurreado"
+sobre 1/4 de la imagen de manera horizontal. Es decir, el primer thread iterará desde el primer pixel "blurreable"
+hasta 1/4 de la altura, el segundo arrancará desde (1/4)+1 y llegará hasta la mitad de la imagen, y así sucesivamente.
+*/ 
 static void* process2(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width-2, 1, height/4);
 }
-
 static void* process3(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width-2, height/4+1, height/2);
 }
-
 static void* process4(__attribute__((unused)) void* _) {
   step_blur3(width, height, data, result, 1, width-2, height/2+1, 3*(height/4));
 }
@@ -47,10 +51,13 @@ int main(int argc, char **argv) {
   for(int i = 0; i<count; i++) {
     uint8_t* tmp;
     pthread_t thread, thread2, thread3;
+    // Creamos 4 threads (3 paralelos + padre)
     pthread_create(&thread, NULL, process2, NULL);
     pthread_create(&thread2, NULL, process3, NULL);
     pthread_create(&thread3, NULL, process4, NULL);
+    // El thread principal/padre iterará sobre el último cuarto de la imagen. 
     step_blur3(width, height, data, result, 1, width-2, 3*(height/4)+1, height-2);
+    // Esperamos la terminacion de los threads
     pthread_join(thread, NULL);
     pthread_join(thread2, NULL);
     pthread_join(thread3, NULL);
