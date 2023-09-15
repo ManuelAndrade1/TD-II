@@ -35,7 +35,7 @@ output:IO = open(fout, "w")
 for root, dirs, files in os.walk(directory_path):
     for filename in files:
         # Check if the file has a .txt extension
-        if fillename.endswith(".txt"):
+        if filename.endswith(".txt"):
             # Print the ful path of the .txt file
             fhand:IO = open(os.path.join(root, filename))
             times:List[int] = get_times(fhand, [])
