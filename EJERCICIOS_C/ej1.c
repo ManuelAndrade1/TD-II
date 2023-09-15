@@ -243,6 +243,8 @@ void printList(struct list* ls) {
 struct list** createLists() {
     // Crea 4 listas para testing
     struct list** lists = (struct list**) malloc(sizeof(struct list*) * 4);
+    for (int i = 0; i < 4; i++) lists[i] = (struct list*) malloc(sizeof(struct list));
+
     for (int i = 0; i < 6; i++) {
         if (i % 2 == 0) {
             addLast(lists[0], 2);
@@ -262,6 +264,8 @@ struct list** createLists() {
 struct list** createListsBis() {
     // Creo 4 listas para firstToLast y lastToFirst
     struct list** lists = (struct list**) malloc(sizeof(struct list*) * 4);
+    for (int i = 0; i < 4; i++) lists[i] = (struct list*) malloc(sizeof(struct list));
+    
     addLast(lists[0], 1);
     addLast(lists[1], 3);
     addLast(lists[1], 4);
