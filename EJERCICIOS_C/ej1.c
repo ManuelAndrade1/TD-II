@@ -42,11 +42,6 @@ struct node* findValue(struct list* ls, int v) {
     devuelve un puntero al primer nodo encontrado que tenga el valor
     pasado como parametro. Devuelve 0 si no existe ese valor.
     */
-   struct node* curr = ls->first;
-   while (curr != 0) {
-    if (curr->value == v) return curr;
-    curr = curr->next; 
-   }
    return 0;
 }
 
