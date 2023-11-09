@@ -25,7 +25,23 @@ section .text
     int 0x80
 
 multiplicar:
-  ; COMPLETAR
+  push si
+  push di
+  push ebx
+  mov ebx, 0x0000FFFF
+  and esi, ebx
+  mov eax, esi
+
+loop:
+  add eax, esi
+  dec di
+  jz return
+  jmp loop
+  
+return:
+  pop ebx
+  pop di
+  pop si
   ret
 
 ; ---------------------------------------------
