@@ -23,12 +23,67 @@ section .text
     int 0x80                   
 
 mergeLow1:
-  ; COMPLETAR
-ret
+  push rbx
+  push rcx
+  push rdx
+  push rsi
+  push rdi
+  push rbp
+
+  mov ebx, 0xFF000000
+  mov ecx, 0x00FF0000
+  mov edx, 0x0000FF00
+  mov ebp, 0x000000FF
+
+  push rsi
+  shl rsi, 16
+  and esi, ebx
+  mov eax, esi
+  pop rsi
+  push rdi
+  shl rdi, 8
+  and edi, ecx
+  add eax, edi
+  pop rdi
+  push rsi
+  shl rsi, 8
+  and esi, edx
+  add eax, esi
+  pop rsi
+  push rdi
+  and edi, ebp
+  add eax, edi
+  pop rdi
+
+  pop rbp
+  pop rdi
+  pop rsi
+  pop rdx
+  pop rcx
+  pop rbx
+  ret
 
 mergeLow2:
-  ; COMPLETAR
-ret
+  push rbx
+  push rcx
+
+  mov ebx, 0xFFFF0000
+  mov ecx, 0x0000FFFF
+  mov rax, 0
+
+  push rsi
+  shl rsi, 16
+  and esi, ebx
+  mov eax, esi
+  pop rsi
+  push rdi
+  and edi, ecx
+  add eax, edi
+  pop rdi
+  
+  pop rcx
+  pop rbx
+  ret
 
 ; ---------------------------------------------
 ; printHex toma como parametro un valor en rdi

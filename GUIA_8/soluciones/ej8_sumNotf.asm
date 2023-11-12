@@ -1,5 +1,5 @@
 section .data
-  arreglo: dd -1,2,3,4,-5,6,7,8,9,-10
+  arreglo: dd -2, -3, 4, -5, 6
                                
 global _start
 section .text
@@ -10,14 +10,14 @@ section .text
     ; dejar el resultado en eax
 
     mov rsi, arreglo
-    mov edi, 10
-    mov ecx, 6
+    mov edi, 5
+    mov ecx, 0
     call sumNotIf
     mov rdi, rax ; paso como parametro rax como rdi
     call printHex
 
     mov rsi, arreglo
-    mov edi, 10
+    mov edi, 5
     call sumSorted
     mov rdi, rax ; paso como parametro rax como rdi
     call printHex
@@ -28,11 +28,40 @@ section .text
     int 0x80                   
 
 sumNotIf:
-  ; COMPLETAR
+  push rsi
+  push rdi
+  mov eax, 0
+  loop:
+    cmp ecx, [rsi]
+    jz next
+    add eax, [rsi]
+  next:
+    add rsi, 4
+    dec edi
+    cmp edi, 0
+    jnz loop
+  pop rdi
+  pop rsi
   ret
   
 sumSorted:
-  ; COMPLETAR
+  push rsi
+  push rdi
+  push rbx
+  mov eax, [rsi]
+  mov ebx, [rsi]
+  loop2:
+    cmp ebx, [rsi]
+    jge next2
+    add eax, [esi]
+  next2:
+    add rsi, 4
+    dec edi
+    cmp edi, 0
+    jnz loop2
+  pop rbx
+  pop rdi
+  pop rsi
   ret
   
   

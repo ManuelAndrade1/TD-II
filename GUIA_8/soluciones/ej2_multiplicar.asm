@@ -1,15 +1,19 @@
 section .data
-  arreglo: dw 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+  numero1: dw 10
+  numero2: dw 30
                                
 global _start
 section .text
 
   _start:                
 
-    ; En la etiqueta arreglo se encuentran los 16 numeros a comparar.
+    mov di, [numero1]
+    mov si, [numero2]
+
+    ; En "di" y en "si" vamos a tener los numeros a multiplicar
     ; dejar el resultado en eax
 
-    call mayor
+    call multiplicar
 
     ; Imprimo el valor en rax
     mov rdi, rax ; paso como parametro rax como rdi
@@ -20,9 +24,21 @@ section .text
     mov rbx, 0     ; codigo    
     int 0x80
 
-mayor:
-  ; COMPLETAR
-  ret
+multiplicar:
+  push rsi
+  push rdi
+
+  mov eax, 0
+  ciclo:
+    add ax, si
+    dec di
+    jz return
+    jmp ciclo
+
+  return: 
+    pop rdi
+    pop rsi
+    ret
 
 ; ---------------------------------------------
 ; printHex toma como parametro un valor en rdi

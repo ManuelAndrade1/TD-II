@@ -1,19 +1,17 @@
+; Respuesta inciso b:
+; Se deberia cambiar simplemente el condicional JA a JG
 section .data
-  numero1: dw 10
-  numero2: dw 30
+  arreglo: dw 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
                                
 global _start
 section .text
 
   _start:                
 
-    mov di, [numero1]
-    mov si, [numero2]
-
-    ; En "di" y en "si" vamos a tener los numeros a multiplicar
+    ; En la etiqueta arreglo se encuentran los 16 numeros a comparar.
     ; dejar el resultado en eax
 
-    call multiplicar
+    call mayor
 
     ; Imprimo el valor en rax
     mov rdi, rax ; paso como parametro rax como rdi
@@ -24,9 +22,32 @@ section .text
     mov rbx, 0     ; codigo    
     int 0x80
 
-multiplicar:
-  ; COMPLETAR
-  ret
+mayor:
+  push rbx
+  push rcx
+  push rdx
+
+  mov rbx, 16
+  mov rcx, arreglo
+  mov ax, [rcx]
+  loop:
+    cmp [rcx], ax
+    ja modif ; salta si [rcx] es mayor a ax
+    continue:
+    add rcx, 2
+    dec rbx
+    jz return
+    jmp loop
+
+  return:
+    pop rdx
+    pop rcx
+    pop rbx
+    ret
+
+modif: 
+  mov ax, [rcx]
+  jmp continue
 
 ; ---------------------------------------------
 ; printHex toma como parametro un valor en rdi
