@@ -1,0 +1,157 @@
+# include <Servo.h>
+
+// Definimos todos los pines y variables necesarias
+
+const int servoPin = 10;
+Servo servo1;
+
+const int VRy = A0;
+const int VRx = A1;
+const int SW = 2;
+
+const int ledPin0 = 3;
+const int ledPin1 = 4;
+const int ledPin2 = 5;
+
+volatile byte button = 0;
+volatile byte espera = 0;
+const int interruptPin = 2;
+
+const int pingPin = 7;
+const int echoPin = 6;
+
+void setup() {
+    Serial.begin(9600);
+    // Servo
+    servo1.attach(servoPin);
+    //Leds
+    pinMode(ledPin0, OUTPUT);
+    pinMode(ledPin1, OUTPUT);
+    pinMode(ledPin2, OUTPUT);
+    // Interrupcion
+    attachInterrupt(digitalPinToInterrupt(interruptPin), click, RISING);
+    // Joystick
+    pinMode(VRx, INPUT);
+    pinMode(VRy, INPUT);
+    pinMode(SW, INPUT_PULLUP);
+    // Sensor
+    pinMode(pingPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+}
+
+void loop() {
+    // Inicializamos las variables de las posiciones
+    int xPosition = 0;
+    int yPosition = 0;
+    int SW_Sstate = digitalRead(SW);
+
+    // Si se produjo una interrupcion recientemente, espera 100ms para evitar el efecto rebote
+    if (espera) {
+        delay(100);
+        espera = 0;
+    }
+ 
+    if (button == 0){
+	// Si el boton esta en cero (condicion inicial), la posicion en x maneja el servo y laposicion en y maneja los leds
+        xPosition = analogRead(VRx);
+        yPosition = analogRead(VRy);
+    }
+    else {
+	// Si el boton esta en uno, la posicion en x maneja los leds y la posicion en y maneja el servo
+      xPosition = analogRead(VRy);
+      yPosition = analogRead(VRx);
+    }
+
+    // Sin importar el estado del boton, mapX maneja informacion respecto al servo, mapY respecto a los leds.
+    int mapXn = map(xPosition, 0, 1023, -512, 512); 
+    int mapY = map(yPosition, 0, 1023, -512, 512);
+
+    // Si el Joystick esta en medio 
+    if (-410 <= mapX <= 410) {
+    turnLeds(map(mapY, -512, 512, 0, 7));
+    // servo1.write(map(mapX, -512, 512, 0, 180));
+  }
+  // El joystick se encuentra a la izquierda (10% del movimiento)
+  if (-512 <= mapX < -410) {
+      int x = map(xPosition, 0, 1023, 0, 180);
+      servo1.write(x);
+    // A la izquierda y arriba o abajo, es decir, en una esquina
+  }
+  // Si no esta en el medio ni a la izq, esta a la derecha (10% del recorrido)
+  if  (410 < mapX <= 512) {
+    int x = map(xPosition, 0, 1023, 0, 180);
+    servo1.write(x);
+    }
+
+    long duration, cm;
+    digitalWrite(pingPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(pingPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(pingPin, LOW);
+    duration = pulseIn(echoPin, HIGH);
+    cm = microsecondsToCentimeters(duration);
+    Serial.print(cm);
+    Serial.print("cm");
+    Serial.println();
+}
+
+void click() {
+  if(!espera){
+    espera = 1;
+      if (button == 0) {
+
+        button = 1;
+      }
+      else {
+        button = 0;
+      }
+  }
+}
+
+long microsecondsToCentimeters(long microseconds) {
+    return microseconds / 29 / 2;
+}
+
+void turnLeds(int pos) {
+    if (pos == 0) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 0);        
+      digitalWrite(ledPin2, 0);
+    }  
+    else if (pos == 1) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 0);
+    } 
+    else if (pos == 2) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 0);
+    }
+    else if (pos == 3) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 0);
+    }
+    else if (pos == 4) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 1);
+    } 
+    else if (pos == 5) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 1);
+    } 
+    else if (pos == 6) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 1);
+    } 
+    else if (pos == 7) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 1);
+    }
+}

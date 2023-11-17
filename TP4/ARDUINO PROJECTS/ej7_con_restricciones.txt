@@ -1,0 +1,154 @@
+# include <Servo.h>
+
+// Definimos todos los pines y variables necesarias
+
+const int servoPin = 10;
+Servo servo1;
+
+const int VRy = A0;
+const int VRx = A1;
+const int SW = 2;
+
+const int ledPin0 = 3;
+const int ledPin1 = 4;
+const int ledPin2 = 5;
+
+volatile byte button = 0;
+volatile byte espera = 0;
+const int interruptPin = 2;
+
+const int pingPin = 7;
+const int echoPin = 6;
+
+void setup() {
+    Serial.begin(9600);
+    // Servo
+    servo1.attach(servoPin);
+    //Leds
+    pinMode(ledPin0, OUTPUT);
+    pinMode(ledPin1, OUTPUT);
+    pinMode(ledPin2, OUTPUT);
+    // Interrupcion
+    attachInterrupt(digitalPinToInterrupt(interruptPin), click, RISING);
+    // Joystick
+    pinMode(VRx, INPUT);
+    pinMode(VRy, INPUT);
+    pinMode(SW, INPUT_PULLUP);
+    // Sensor
+    pinMode(pingPin, OUTPUT);
+    pinMode(echoPin, INPUT);
+}
+
+void loop() {
+
+  if (espera) {
+    delay(100);
+    espera = 0;
+  }
+  int xPosition = analogRead(VRx);
+  int yPosition = analogRead(VRy);
+  int SW_State = digitalRead(SW);
+
+  int mapY = 0;
+  int mapX = 0;
+  int mapCoordsX = 0;
+  int mapCoordsY = 0;
+
+  if (button == 0) {
+      // En principio, toma las coordenadas de x y las mapea a una posicion del servo, y las de "y", y las mapea 
+      // a una determinada cantidad de leds que se deben prender.
+    mapX = map(xPosition, 0, 1023, 0, 180);
+    mapY = map(yPosition, 0, 1023, 0, 7);
+    mapXCoords = map(xPosition, 0, 1023, -512, 512);
+    mapYCoords = map(yPosition, 0, 1023, -512, 512);    
+  }
+  else {
+    // Si la variable button esta en 1, toma las posiciones de y como posicion del servo, y las de "x" las mapea
+    // a los leds correspondientes que deben prenderse.
+    mapX = map(yPosition, 0, 1023, 0, 180);
+    mapY = map(xPosition, 0, 1023, 0, 7);
+    mapXCoords = map(yPosition, 0, 1023, -512, 512);
+    mapYCoords = map(xPosition, 0, 1023, -512, 512);
+  }
+
+  if (-410 <= mapXCoords <= 410) { // Me estoy moviendo sobre el eje vertical, igual que los ejercicios anteriores
+    turnLeds(mapY);
+  }
+  if (-410 <= mapYCoords <= 410) { // Me estoy moviendo sobre el eje horizontal, igual que en los ej. anteriores
+    servo1.write(mapX);
+  }
+
+  // Maneja el funcionamiento del sensor ultrasonico, imprime en pantalla los valores registrados por el sensor.
+  long duration, cm;
+  digitalWrite(pingPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pingPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  cm = microsecondsToCentimeters(duration);
+  Serial.print(cm);
+  Serial.print("cm");
+  Serial.println();
+}
+
+void click() {
+  if(!espera){
+    espera = 1;
+      if (button == 0) {
+
+        button = 1;
+      }
+      else {
+        button = 0;
+      }
+  }
+}
+
+long microsecondsToCentimeters(long microseconds) {
+    return microseconds / 29 / 2;
+}
+
+void turnLeds(int pos) {
+    // La siguiente funcion maneja qué leds se encienden dependiendo de la posición del joystick.
+    if (pos == 0) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 0);        
+      digitalWrite(ledPin2, 0);
+    }  
+    else if (pos == 1) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 0);
+    } 
+    else if (pos == 2) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 0);
+    }
+    else if (pos == 3) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 0);
+    }
+    else if (pos == 4) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 1);
+    } 
+    else if (pos == 5) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 1);
+    } 
+    else if (pos == 6) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 1);
+    } 
+    else if (pos == 7) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 1);
+    }
+}

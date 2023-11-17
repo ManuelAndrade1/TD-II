@@ -1,0 +1,85 @@
+const int ledPin0 = 3;
+const int ledPin1 = 4;
+const int ledPin2 = 5;
+const int VRy = A0;
+const int VRx = A1;
+const int SW = 2;
+
+void setup() {
+    Serial.begin(9600);
+    pinMode(ledPin0, OUTPUT);
+    pinMode(VRx, INPUT);
+    pinMode(VRy, INPUT);
+    pinMode(SW, INPUT_PULLUP);
+}
+void loop() {
+    int xPosition = analogRead(VRx);
+    int yPosition = analogRead(VRy);
+    int SW_state = digitalRead(SW);
+    int mapX = map(xPosition, 0, 1023, -512, 512);
+    int mapY = map(yPosition, 0, 1023, -512, 512);
+    Serial.println(mapX);
+    Serial.println(mapY);
+    Serial.println(SW_state);
+    digitalWrite(ledPin0, SW_state);
+
+/*
+ Consideramos el 10% de 1024 = 102. Entonces las esquinas se encuentran en las coordenadas que estén:
+	Entre [-512:-410) de "x" y [-512:-410) o [410:512) de "y".
+	Entre [410:512) de "x" y [-512:-410) o [410:512) de "y".
+
+*/
+
+  // El joystick se encuentra en el medio (80% del movimiento)
+  if (-410 <= mapX && mapX <= 410) {
+    // En el medio y arriba
+    if (410 <= mapY && mapY <= 512) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 0);
+    }
+    // En el medio y abajo
+    else if (-512 <= mapY && mapY <= -410) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 1);
+    }
+    // En el centro
+    else {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 0);
+    }
+  }
+  // El joystick se encuentra a la izquierda (10% del movimiento)
+  else if (-512 <= mapX && mapX < -410) {
+    // A la izquierda y al centro en y (<--)
+    if (-410 <= mapY <= 410) {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 1);
+    }
+    // A la izquierda y arriba o abajo, es decir, en una esquina
+    else {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 0);
+    }
+  }
+  // Si no esta en el medio ni a la izq, esta a la derecha (10% del recorrido)
+  else {
+    // A la derecha y al centro en y (-->)
+    if (-410 <= mapY <= 410) {
+      digitalWrite(ledPin0, 1);
+      digitalWrite(ledPin1, 1);
+      digitalWrite(ledPin2, 0);
+    }
+    // A la derecha y arriba o abajo, es decir, en una esquina
+    else {
+      digitalWrite(ledPin0, 0);
+      digitalWrite(ledPin1, 0);
+      digitalWrite(ledPin2, 0);
+    }
+  }
+    delay(10);
+}
